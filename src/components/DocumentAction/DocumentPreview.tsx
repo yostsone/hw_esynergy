@@ -6,22 +6,21 @@ import Loader from '../Loader/Loader';
 
 export default function DocumentPreview() {
   const { id = '' } = useParams<{ id?: string }>();
-
   const { data, loading, error } = useSingleDocument(id);
-
-  if (loading) {
-    return <Loader />
-  }
-  if (error) {
-    return <div className="text-red-500"> Error: {error.message} </div>
-  }
-
   const { documentName, fields } = data || {};
 
   const sortedFields = useMemo(() => {
     if (!fields || fields.length === 0) return [];
     return [...fields].sort((a, b) => a.field_seq - b.field_seq);
   }, [fields]);
+
+  if (loading) {
+    return <Loader />
+  }
+
+  if (error) {
+    return <div className="text-red-500"> Error: {error.message} </div>
+  }
 
   return (
     <section>
